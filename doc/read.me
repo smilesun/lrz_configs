@@ -1,0 +1,95 @@
+0.don't submit jobs in the source code file since you never know what will happen!
+
+1.try to build a complete registry in the source code  by source('codename.R') in the R console
+
+2.in R console load the registration by reg = loadRegistry('file.dir') (if you log out and log in again, otherwise, skip this)
+then type "reg" you will find out if this is run on slurm or not
+
+3.getStatus() # without parameters 
+
+  status for 100 jobs:
+  Submitted :   0 (  0.0%)
+  Queued    :   0 (  0.0%)
+  Started   :   0 (  0.0%)
+  Running   :   0 (  0.0%)
+  Done      :   0 (  0.0%)
+  Error     :   0 (  0.0%)
+  Expired   :   0 (  0.0%)
+
+
+4. colnames(getJobTable()) is a datatable summarizing the jobs that is created
+
+5. submitJobs(resources = list(walltime = 3600, memory = 1024)) # always run this seperately, don't put this into the code
+
+6. after submitting, you could still call "getStatus()" to see about the jobs status
+
+7. findNotSubmitted() will give you all the job ids
+
+8. loadResult(), which returns a single result exactly in the form it was calculated during mapping
+or mean(reduceResults(function(x, y) c(x, y))), here the result of the first iteration will be passed as the first arguments x , and y is the ith iteration, so the result is a vector of c(x,y,z,....)
+
+0. 
+
+
+ru37wof2@lxa191:~> echo $PROJECT
+/naslx/projects/pr74ze/ru37wof2  # put the large files here
+
+ru37wof2@lxa191:~> pwd    
+/home/hpc/pr74ze/ru37wof2   # this is the home directory, don't put too much things here!
+
+
+0. The limit for a typical serial cluster is 
+
+96 hour = 96*3600 seconds
+MEM 2 G = 2000 M
+
+don't exceed this !
+
+but if you set these numbers too big, your job will never get scheduled ! 
+
+0.
+
+/home/hpc/pr74ze/ri89coc2/lrz_configs/config_files/batchtools/slurm_lmulrz.tmpl   is the shared template file across the user group 
+
+
+.batchtools.conf.R -> /home/hpc/pr74ze/ri89coc2/lrz_configs/config_files/batchtools/.batchtools.conf.R  is a soft link to the batchtools configuration file
+
+
+make a copy of the soft(symbolic) link of the configuration file and you could add custum lines to it
+
+
+1. 
+
+in .batchtools.conf.R the first line cluster.functions = batchtools::makeClusterFunctionsSlurm("/home/hpc/pr74ze/ri89coc2/lrz_configs/config_files/batchtools/slurm_lmulrz.tmpl", 
+clusters = "serial") specify the cluster to use
+
+
+1. specify max.concurrent.jobs in the config file  explicitly !
+
+
+
+1. Each of the cluster has different memory and time limits, set these parameters explicitly!
+
+https://www.lrz.de/services/compute/linux-cluster/batch_serial/limits/
+
+2. salloc -n X [--time=hh:mm:ss] and you will get assigned a node for X tasks with life time specified(default life time is 15 minutes)
+
+
+3./home/hpc/pr74ze/ri89coc2/lrz_configs/bin/initial_cluster_setup   is the setup script for the first use, For the compstat group (pr74ze)
+
+3.1 MPP2 is added as the default cluster variable $CLUSTERS
+
+3.2 Your path is updated so you can use some custom scripts:
+
+
+cluster_summary summarizes the activity on all (or specified) clusters (e.g. cluster_summary serial shows only the activity on the serial cluster)
+
+sk This kills a job specified by an ID (e.g. sk 1234 kills job nr. 1234)
+
+skillall This kills all your jobs on mpp2 cluster (which will be the default cluster)
+
+To kill all jobs on a particular cluster say serial, use "scancel --clusters=serial -u $USER"
+
+sq lists your jobs. If you don’t add a specific cluster, it will check the default cluster $CLUSTERS
+otherwise use sq serial to see about the serail cluster
+

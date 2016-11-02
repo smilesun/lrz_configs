@@ -1,0 +1,5 @@
+nohup R CMD BATCH emo_2017/experiments/experiment_machine_learning.R &
+
+module avail
+module unload gcc
+module load gcc

@@ -1,0 +1,6 @@
+"cluster_summary" summarizes the activity on all clusters
+"cluster_summary serial" shows only the activity on the serial cluster
+"install_r_openssl" installs openssl
+"lrz-install-java" makes rjava usable ???
+"sk" kills a job specified by an ID(e.g. sk 1234 kills job nr. 1234)
+"sq" lists your jobs. if you don't specify a cluster, it will check the default cluster $CLUSTERS
